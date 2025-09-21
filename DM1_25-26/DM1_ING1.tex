@@ -1,0 +1,215 @@
+\documentclass{my_class}%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+\begin{document}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+\myTitle{2025 - 2026}{ING${}_1$-INFO}{isimm.png}{Maths:  réseaux de neurones}{DM $\mathrm{n}^\mathrm{o} 1$ (Perceptron)}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\tikzstyle{inputNode}=[draw,circle,minimum size=30pt,inner sep=0pt]
+\tikzstyle{stateTransition}=[-stealth, thick]
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%
+%\vspace*{-1cm}
+\section*{Rappels}
+Etant donnée une matrice $W\in \R ^{1\times n}$ ($n\in \N^*$) et $\beta\in  \R $. On appelle perceptron linéaire de poids $W$, noté  $P_W$, l'application $$P_W :   X \ni \R ^{n\times 1}\mapsto  P_W(X)\in\{-1,1\}$$ définie par 
+\begin{equation}\label{pw}
+P_W(X)= \left\{\begin{matrix} 1 & \mathrm{si} & WX\geq 0 \\ -1 & \mathrm{sinon} & {} \end{matrix}\right. 
+\end{equation}
+et perceptron affine de poids $W$ et de biais $\beta$, noté $P_{W,\beta}$, l'application $$P_{W,\beta} :   X \ni \R ^{n\times 1}\mapsto  P_{W,\beta}(X)\in\{-1,1\}$$ définie par 
+\begin{equation}\label{pw}
+P_{W,\beta}(X)= \left\{\begin{matrix} 1 & \mathrm{si} & WX+\beta\geq 0 \\ -1 & \mathrm{sinon} & {} \end{matrix}\right. 
+\end{equation}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                      EXERCICE I
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection*{ EXERCICE I}
+\begin{enumerate}
+\item Considérons $W_\sharp =\begin{pmatrix} 2 & -1   \end{pmatrix}$, $W =\begin{pmatrix} 2 & -1 & \frac{1}{2} \end{pmatrix}$ et $\beta=\frac{1}{2}$. 
+\begin{enumerate}
+\item   Représenter schématiquement $P_{W_\sharp,\beta}$ et $P_W$.
+\item Pour $X=\begin{pmatrix}x_1\\ x_2\\ 1 \end{pmatrix}\in\R ^3$, 
+comparer $P_{W_\sharp,\beta}(X_\sharp)$ et $P_W(X)$ où $X_\sharp=\begin{pmatrix}x_1\\ x_2 \end{pmatrix}$.
+\item Donner une interprétation géométrique pour cette comparaison.
+\end{enumerate}
+\item Généraliser cette comparaison pour $W\in \R ^{1\times n}$ ($n\geq 2$) et $\beta\in  \R $.
+\end{enumerate}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                      EXERCICE II
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection*{EXERCICE II}
+A) On considère un perceptron linéaire $P_W$  où $W=(\alpha), \alpha\in\R $ ; dans ce cas on écrira $P_\alpha$ et pour $X=(x)\in\R $, $X=x$ tout simplement.
+\begin{center}
+
+\begin{tikzpicture}
+\begin{scope}
+\node [anchor=center,circle,draw,blue,very thick,minimum size=3.5em,fill=white,drop shadow={shadow xshift=0.1em,shadow yshift=-0.1em}] (neuron) at (0,0) {};
+\node [anchor=east] (x1) at ([xshift=-6em]neuron.west) {\Large{$x$}};
+\node [anchor=west] (y) at ([xshift=6em]neuron.east) {\Large{$y=P_\alpha(x)$}};
+\node [anchor=center] (neuronmath) at (neuron.center) {\small{$\alpha x$}};
+\draw [->,thick] (x1.east) -- (neuron.180) node [pos=0.5,above] {$\alpha$};
+\draw [->,thick] (neuron.east) -- (y.west);
+\end{scope}
+\end{tikzpicture}
+\end{center}
+
+\begin{enumerate}
+\item Existe-t-il $\alpha\in\R $ tel que $ P_\alpha(x)=1$ $\forall x\in \R $ ?
+\item Existe-t-il $\alpha\in\R $ tel que $ P_\alpha(x)=-1$ $\forall x\in \R $ ?
+\item Existe-t-il $\alpha\in\R $ tel que $ P_\alpha(x)=\left\{\begin{matrix} 1 & \mathrm{si} & x\in \R _+ \\ -1 & \mathrm{si} & {x\in \R ^*_-} \end{matrix}\right.$ ?
+\item Existe-t-il $\alpha\in\R $ tel que $ P_\alpha(x)=\left\{\begin{matrix} 1 & \mathrm{si} & x\in \R _- \\ -1 & \mathrm{si} & {x\in \R ^*_+} \end{matrix}\right.$ ?
+\end{enumerate}
+%
+B) On considère un perceptron linéaire $P_W$  où $W=\begin{pmatrix}\alpha &\beta\end{pmatrix}, \alpha,\beta\in\R $.
+\begin{center}
+
+\begin{tikzpicture}
+\begin{scope}
+\node [anchor=center,circle,draw,blue,very thick,minimum size=3.5em,fill=white,drop shadow={shadow xshift=0.1em,shadow yshift=-0.1em}] (neuron) at (0,0) {};
+%\node [anchor=east] (x1) at ([xshift=-6em]neuron.west) {\Large{$x_2$}};
+\node [anchor=center] (x0) at ([yshift=3em]x1.center) {\Large{$x$}};
+\node [anchor=center] (x2) at ([yshift=-3em]x1.center) {\Large{$1$}};
+\node [anchor=west] (y) at ([xshift=6em]neuron.east) {\Large{$y=P_W(X),\ X=\begin{pmatrix}x\\ 1 \end{pmatrix} $}};
+\node [anchor=center] (neuronmath) at (neuron.center) {\small{$WX$}};
+
+\draw [->,thick] (x0.east) -- (neuron.150) node [pos=0.5,above] {$\alpha$};
+%\draw [->,thick] (x1.east) -- (neuron.180) node [pos=0.5,above] {$w_2$};
+\draw [->,thick] (x2.east) -- (neuron.210) node [pos=0.5,above] {$\beta$};
+\draw [->,thick] (neuron.east) -- (y.west);
+
+\end{scope}
+\end{tikzpicture}
+\end{center}
+
+\begin{enumerate}
+\item Existe-t-il $W$ tel que $ P_W(X)=1$ $\forall x\in \R $ ?
+\item Existe-t-il $W$ tel que $ P_W(X)=-1$ $\forall x\in \R $ ?
+\item Existe-t-il $W$ tel que $ P_W(X)=\left\{\begin{matrix} 1 & \mathrm{si} & {x\geq 1} \\ -1 & \mathrm{si} & {x<1} \end{matrix}\right.$ ?
+\item Existe-t-il $W$ tel que $ P_W(X)=\left\{\begin{matrix} 1 & \mathrm{si} & {x\leq 1} \\ -1 & \mathrm{si} & {x>1} \end{matrix}\right.$ ?
+\end{enumerate}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                      EXERCICE III
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection*{EXERCICE III }
+On considère un perceptron linéaire $P_W$  où $W=\begin{pmatrix}\alpha_1 &\alpha_2\end{pmatrix}\in\R ^{1\times 2}$.
+\begin{center}
+
+ \begin{tikzpicture}
+\begin{scope}
+\node [anchor=center,circle,draw,blue,very thick,minimum size=3.5em,fill=white,drop shadow={shadow xshift=0.1em,shadow yshift=-0.1em}] (neuron) at (0,0) {};
+%\node [anchor=east] (x1) at ([xshift=-6em]neuron.west) {\Large{$x_2$}};
+\node [anchor=center] (x0) at ([yshift=3em]x1.center) {\Large{$x_1$}};
+\node [anchor=center] (x2) at ([yshift=-3em]x1.center) {\Large{$x_2$}};
+\node [anchor=west] (y) at ([xshift=6em]neuron.east) {\Large{$y=P_W(X),\ X=\begin{pmatrix}x_1\\ x_2 \end{pmatrix} $}};
+\node [anchor=center] (neuronmath) at (neuron.center) {\small{$WX$}};
+
+\draw [->,thick] (x0.east) -- (neuron.150) node [pos=0.5,above] {$\alpha_1$};
+%\draw [->,thick] (x1.east) -- (neuron.180) node [pos=0.5,above] {$w_2$};
+\draw [->,thick] (x2.east) -- (neuron.210) node [pos=0.5,above] {$\alpha_2$};
+\draw [->,thick] (neuron.east) -- (y.west);
+
+\end{scope}
+\end{tikzpicture}
+\end{center}
+
+\begin{enumerate}
+\item Trouvez $W$ pour que $ P_W$ nous permette de classifier l'ensemble de données suivant:
+ 
+\begin{center}
+ {\normalsize
+\begin{tabular}{|ccc|} \hline
+Entrée $X=(x_1,x_2)$&$\mathbf{\rightarrow}$ & Label $L$  \\[5pt] \hline
+$ {x_1\in \R _+, x_2\in \R _+}$ & $\mathbf{\rightarrow}$ & 1 \\[5pt] \hline
+$ {x_1\in \R ^*_-, x_2\in \R ^*_-}$ & $\mathbf{\rightarrow}$ & -1 \\[5pt] \hline
+\end{tabular}
+}
+\end{center}
+% 
+\item Trouvez $W$ pour que $ P_W$ nous permette de classifier l'ensemble de données suivant:
+ 
+\begin{center}
+ {\normalsize
+\begin{tabular}{|ccc|} \hline
+Entrée $X=(x_1,x_2)$&$\mathbf{\rightarrow}$ & Label $L$  \\[5pt] \hline
+$ {x_1\in \R _-, x_2\in \R _+}$ & $\mathbf{\rightarrow}$ & 1 \\[5pt] \hline
+$ {x_1\in \R ^*+, x_2\in \R ^*_-}$ & $\mathbf{\rightarrow}$ & -1 \\[5pt] \hline
+\end{tabular}
+}
+\end{center}
+%
+\item Trouvez $W$ pour que $ P_W$ nous permette de classifier l'ensemble de données suivant:
+ 
+\begin{center}
+ {\normalsize
+\begin{tabular}{|ccc|} \hline
+Entrée $X$&$\mathbf{\rightarrow}$ & Label $L$  \\[5pt] \hline
+$ {  (1,1)^\top}$ & $\mathbf{\rightarrow}$ & 1 \\[5pt] \hline
+$ { (0,1)^\top}$ & $\mathbf{\rightarrow}$ & -1 \\[5pt] \hline
+$ { (1,0)^\top}$ & $\mathbf{\rightarrow}$ & 1 \\[5pt] \hline
+$ { (0,0)^\top}$ & $\mathbf{\rightarrow}$ & 1 \\[5pt] \hline
+\end{tabular}
+}
+\end{center}
+\item Trouvez $W$ pour que $ P_W$ nous permette de classifier l'ensemble de données suivant:
+ 
+\begin{center}
+ {\normalsize
+\begin{tabular}{|ccc|} \hline
+Entrée $X$&$\mathbf{\rightarrow}$ & Label $L$  \\[5pt] \hline
+$ {  (1,1)^\top}$ & $\mathbf{\rightarrow}$ & -1 \\[5pt]  \hline
+$ { (0,1)^\top}$ & $\mathbf{\rightarrow}$ & 1 \\[5pt]  \hline
+$ { (1,0)^\top}$ & $\mathbf{\rightarrow}$ & 1 \\[5pt]  \hline
+$ { (0,0)^\top}$ & $\mathbf{\rightarrow}$ & 1 \\[5pt]  \hline
+\end{tabular}
+}
+\end{center}
+\end{enumerate}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                      EXERCICE IV
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection*{EXERCICE IV }
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+On considère un perceptron linéaire $P_W$  où $W=\begin{pmatrix}\alpha_1 &\alpha_2 & \beta\end{pmatrix}\in\R ^{1\times 3}$.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{figure}[htp]\centering
+%%------------------------------------------------------------------------------------------------------------
+ \begin{tikzpicture}
+\begin{scope}
+\node [anchor=center,circle,draw,blue,very thick,minimum size=3.5em,fill=white,drop shadow={shadow xshift=0.1em,shadow yshift=-0.1em}] (neuron) at (0,0) {};
+\node [anchor=east] (x1) at ([xshift=-6em]neuron.west) {\Large{$x_2$}};
+\node [anchor=center] (x0) at ([yshift=3em]x1.center) {\Large{$x_1$}};
+\node [anchor=center] (x2) at ([yshift=-3em]x1.center) {\Large{$1$}};
+\node [anchor=west] (y) at ([xshift=6em]neuron.east) {\Large{$y=P_W(X),\ X=\begin{pmatrix}x_1\\ x_2 \\ 1\end{pmatrix} $}};
+\node [anchor=center] (neuronmath) at (neuron.center) {\small{$WX$}};
+
+\draw [->,thick] (x0.east) -- (neuron.150) node [pos=0.5,above] {$\alpha_1$};
+\draw [->,thick] (x1.east) -- (neuron.180) node [pos=0.5,above] {$\alpha_2$};
+\draw [->,thick] (x2.east) -- (neuron.210) node [pos=0.5,above] {$\beta$};
+\draw [->,thick] (neuron.east) -- (y.west);
+
+\end{scope}
+\end{tikzpicture}
+%%%
+\end{figure}
+\begin{enumerate}
+\item Trouvez le poids $W$ pour que le perceptron $P_W$ calcule la fonction ET logique.
+ \item Trouvez le poids $W$ pour que le perceptron $P_W$ calcule la fonction OU logique.
+ \item Essayer de trouver des poids $W$ pour la fonction XOR.
+\end{enumerate}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+ 
+                                    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                                    %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                                         \end{document} 
+
+                                    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                                     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                                    
